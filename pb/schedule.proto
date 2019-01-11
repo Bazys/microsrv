@@ -1,0 +1,17 @@
+syntax = "proto3";
+package pb;
+option go_package = "pb";
+import "google/protobuf/timestamp.proto";
+
+enum Type {
+  IMMEDIATELY = 0;
+  PERIODICALY = 1;
+}
+
+message Schedule {
+  Type type = 1;
+  google.protobuf.Timestamp first_run = 2;
+  int32 intervals = 3;
+  sint32 max = 4;
+}
+

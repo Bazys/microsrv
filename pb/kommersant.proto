@@ -1,0 +1,21 @@
+syntax = "proto3";
+package pb;
+option go_package = "pb";
+
+import "schedule.proto";
+
+service Kommersant {
+  rpc Create (KommersantRequest) returns (KommersantResponse) {}
+  rpc Result (KommersantRequest) returns (KommersantResponse) {}
+}
+
+message KommersantRequest {
+  string ad_num = 1;
+  pb.Schedule schedule = 2;
+}
+
+message KommersantResponse {
+  int32 status = 1;
+  string message = 2;
+  string err = 3;
+}

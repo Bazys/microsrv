@@ -1,0 +1,302 @@
+syntax = "proto3";
+package pb;
+option go_package = "pb";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+
+service DebtorSvc {
+  rpc CreateDebtor(Debtor) returns (DebtorResponse) {}
+  rpc GetDebtor(DebtorByID) returns (DebtorResponse) {}
+  rpc GetAll(Pagination) returns (DebtorsResponse) {}
+  rpc Save(UpadateDebtor) returns (DebtorResponse) {}
+  rpc Delete(DebtorByID) returns (ErrorResponse) {}
+}
+
+message DebtorByID {
+  uint32 ID = 1;
+}
+
+message Pagination  {
+	int64 limit = 1;
+	int64  from = 2;
+	string name = 3;
+	string sort = 4;
+}
+
+message DebtorsResponse {
+  repeated Debtor debtors = 1;
+  uint32 count = 2;
+  string error = 3;
+}
+
+message ErrorResponse {
+  string error = 1;
+}
+
+message DebtorResponse {
+  Debtor debtor = 1;
+  string error = 2;
+}
+
+message UpadateDebtor {
+  uint32 ID = 1;
+  Debtor update = 2;
+}
+
+message Debtor {
+  uint32 ID = 1 [json_name="id"];
+  string name = 2;
+  string fullName = 3;
+  string INN = 4;
+  string KPP = 5;
+  string OGRN = 6;
+  string address = 7;
+  string postAddress = 8;
+  bool postAddressMatch = 9;
+  Arbitration arbitration = 10;
+  string arbitrationID = 11 [json_name="arbitrationId"];
+  string caseNo = 12;
+  google.protobuf.Timestamp decisionDate = 13;
+	BankruptcyManager bankruptcyManager = 14;
+  uint32 bankruptcyManagerID = 15 [json_name="bankruptcyManagerId"];
+  repeated Bidding biddings = 16;
+  string contacts = 17;
+	repeated BankDetail bank_details = 18;
+}
+
+message Arbitration {
+	string ID = 1;
+	string name = 2;
+}
+
+message BankruptcyManager {
+  uint32 ID = 1;
+  string name = 2;
+  string surname = 3;
+  string patronymicname = 4;
+  string INN = 5;
+  string SNILS = 6;
+  string address = 7;
+  uint32 sroID = 8;
+}
+
+message Bidding {
+  uint32 ID = 1;
+  string name = 2;
+  string description = 3;
+  uint32 debtorID = 4;
+  uint32 initiatorID = 5;
+	Initiator initiator = 6;
+	repeated Advert adverts = 7;
+	repeated TradingCode tradingCode = 8;
+}
+
+message Advert {
+  uint32 ID = 1;
+  float week = 2;
+  Debtor debtor = 3;
+  uint32 debtorID = 4;
+	Bidding bidding = 5;
+	uint32 biddingID = 6;
+	TradingCode tradingCode = 7;
+	uint32 tradingCodeID = 8;
+	User creator = 9;
+	int32 creatorID = 10;
+	AdvertType advert = 11;
+	uint32 advertID = 12;
+	string advertOther = 13;
+	Initiator organiser = 14;
+	uint32 organiserID = 15;
+	Responsible responsible = 16;
+	uint32 responsibleID = 17;
+	Project project = 18;
+	uint32 projectID = 19;
+	User lawyer = 20;
+	uint32 lawyerID = 21;
+	repeated TaskList taskLists = 22;
+  repeated Attachment attachments = 23;
+  string comment = 24;
+  uint32 requestCount = 25;
+  uint32 lotsCount = 26;
+  google.protobuf.Timestamp created_at = 27;
+}
+
+message Responsible {
+  uint32 ID = 1;
+	User user = 2;
+	int32 userID = 3;
+}
+
+message Project {
+  uint32 ID = 1;
+	string project = 2;
+	string data = 3;
+}
+
+message TaskHistory {
+  uint32 ID = 1;
+	int32 taskListID = 2;
+	User user = 3;
+	uint32 userID = 4;
+	string comment = 5;
+	bool complete = 6;
+	bool mandatory = 7;
+	google.protobuf.Timestamp updatedAt = 8;
+}
+
+message TaskList {
+  uint32 ID = 1;
+	uint32 organisationID = 2;
+	bool complete = 3;
+	uint32 sequence = 4;
+	bool mandatory = 5;
+	bool isbidcode = 6;
+  string name = 7;
+	AttachmentType attachmentType = 8;
+	uint32 attachmentTypeID = 9;
+	repeated Attachment attachment =10;
+	User doer = 11;
+	uint32 doerID = 12;
+	google.protobuf.Timestamp updatedAt = 13;
+	repeated TaskHistory histories = 14;
+}
+
+message TradingCode {
+  uint32 ID = 1;
+  string name = 2;
+	repeated Calculation calculations = 3;
+	repeated Attachment attachments = 4;
+	uint32 biddingID = 5;
+	Bidding bidding = 6;
+	repeated Advert adverts = 7;
+	uint32 sourceID = 8;
+	uint32 organisationID = 9;
+}
+
+message Calculation {
+  uint32 ID = 1;
+	TradingCode tradingCode = 2;
+	uint32 tradingCodeID = 3;
+	bool sign = 4;
+	float costs = 5;
+	Types type = 6;
+	Source source = 7;
+	string originalFileName = 12;
+	string file = 13;
+	string description = 14;
+	google.protobuf.Timestamp date = 15;
+}
+
+enum Source {
+  debtor = 0;
+  manager = 1;
+  other = 2;
+}
+
+enum Types {
+  reward = 0;
+  compensation = 1;
+  cost = 2;
+  transfer = 3;
+}
+
+message Initiator {
+  uint32 ID = 1;
+  string name = 2;
+  bool type = 3;
+  string fullName = 4;
+  string INN = 5;
+  string KPP = 6;
+  string OGRN = 7;
+  string SNILS = 8;
+  string address = 9;
+  string postAddress = 10;
+	repeated BankDetail bank_details = 11;
+  string email = 12;
+  string phone = 13;
+  string position = 14;
+  string chief = 15;
+  repeated Bidding biddings = 16;
+}
+
+message BankDetail {
+  uint32 ID = 1;
+  uint32 marketPlaceID = 2;
+  uint32 debtorID = 3;
+  uint32 initiatorID = 4;
+  string name = 5;
+  string bank_account = 6;
+  string bank = 7;
+  string corr_account = 8;
+  string BIK = 9;
+  repeated Remaining remainings = 10;
+  google.protobuf.Timestamp created_at = 11;
+}
+
+message Remaining  {
+  uint32 ID = 1;
+  google.protobuf.Timestamp start_date = 2;
+  google.protobuf.Timestamp end_date = 3;
+  string account = 4;
+  float initial_balance = 5;
+  float income = 6;
+  float write_off = 7;
+  float final_balance = 8;
+	repeated google.protobuf.Any payment_documents = 9;
+	uint32 creator_ID = 10;
+  User creator = 11;
+  BankDetail bank_detail = 12;
+}
+
+message UserGroup {
+  uint32 ID = 1;
+  string name = 2;
+}
+
+message User {
+  uint32 ID = 1;
+  string user = 2;
+  string role = 3;
+	UserGroup group = 4;
+	uint32 groupID = 5;
+	string data = 6;
+	string pr = 7;
+	string uh = 8;
+	int32 tip = 9;
+	string pos = 10;
+	int32 tel = 11;
+	string email = 12;
+}
+
+message Attachment {
+  uint32 ID = 1;
+	uint32 organisationID = 2;
+	Advert organisation = 3;
+	uint32 taskListID = 4;
+	AttachmentType attachmentType = 5;
+	uint32 attachmentTypeID = 6;
+	uint32 tradingCodeID = 7;
+	TradingCode tradingCode = 8;
+  string adNum = 9;
+  google.protobuf.Timestamp adDate = 10;
+	float costs = 11;
+	string originalFileName = 12;
+	string file = 13;
+	string comment = 14;
+	bool correct = 15;
+	User creator = 16;
+	uint32 creatorID = 17;
+	google.protobuf.Timestamp updated_at = 18;
+}
+
+message AttachmentType {
+  uint32 ID = 1;
+  string name = 2;
+}
+
+message AdvertType {
+  uint32 ID = 1;
+  string name = 2;
+	bool createBidCode = 3;
+	bool isSlave = 4;
+}

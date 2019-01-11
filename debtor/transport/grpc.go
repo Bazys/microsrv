@@ -3,13 +3,14 @@ package transport
 import (
 	"context"
 
-	"api/model"
+	"microsrv/model"
+
+	"microsrv/debtor/endpoint"
+	"microsrv/pb"
 
 	"github.com/go-kit/kit/log"
 	grpctransport "github.com/go-kit/kit/transport/grpc"
 	"github.com/jinzhu/copier"
-	"microsrv/debtor/endpoint"
-	"microsrv/pb"
 	oldcontext "golang.org/x/net/context"
 )
 

@@ -23,9 +23,12 @@ type Service interface {
 }
 
 var (
+	// ErrInconsistentIDs var
 	ErrInconsistentIDs = errors.New("inconsistent IDs")
-	ErrAlreadyExists   = errors.New("already exists")
-	ErrNotFound        = errors.New("not found")
+	// ErrAlreadyExists var
+	ErrAlreadyExists = errors.New("already exists")
+	// ErrNotFound var
+	ErrNotFound = errors.New("not found")
 )
 
 type databaseStore struct{ db *gorm.DB }
